@@ -13,6 +13,10 @@ return [
     | other UI elements where an application name needs to be displayed.
     |
     */
+    // 'providers' => [
+    //     Kreait\Laravel\Firebase\ServiceProvider::class
+    // ],
+
 
     'name' => env('APP_NAME', 'Laravel'),
 

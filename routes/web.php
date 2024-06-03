@@ -1,9 +1,13 @@
 <?php
 
+use App\Http\Middleware\Admin;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\RuanganController;
+use App\Http\Controllers\Admin\DevicesController;
+use App\Http\Controllers\Admin\UserController;
 
 
 Route::get('/', function () {
