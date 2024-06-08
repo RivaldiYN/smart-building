@@ -76,7 +76,7 @@
   <!-- /.navbar -->
 
   <!-- Main Sidebar Container -->
-  <aside class="main-sidebar elevation-4" style="background-color: #28a745;">
+  <aside class="main-sidebar elevation-4" style="background-color: #BFA045;">
     <!-- Brand Logo -->
     <a href="#" class="brand-link">
       <img src="{{ asset('assets/itera.jpg') }}" alt="Logo" class="brand-image" style="opacity: .8">

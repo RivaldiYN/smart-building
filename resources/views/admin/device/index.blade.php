@@ -1,6 +1,6 @@
 @extends('layouts.admin.app')
 
-@section('title', 'Kelola Ruangan')
+@section('title', 'Kelola Device')
 
 @section('content')
     <!--./Tabel User-->
@@ -13,7 +13,7 @@
                         <h4 class="alert alert-warning mb-2">{{session('status')}}</h4>
                         @endif
                         <div class="card-header">
-                            <h3 class="card-title">Semua Ruangan</h3>
+                            <h3 class="card-title">Semua Device</h3>
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body" style="overflow-x:overlay">
@@ -21,11 +21,11 @@
                                 <thead>
                                     <tr>
                                         <th style="width: 10px">No</th>
-                                        <th>Nama Ruangan</th>
-                                        <th>Deskripsi</th>
-                                        <th>Foto Ruangan</th>
-                                        <th>Status</th>
-                                        <th>Jumlah Orang</th>
+                                        <th>Room ID</th>
+                                        <th>Nama Device</th>
+                                        <th>Link Monitoring</th>
+                                        <th>Link Controlling</th>
+                                        <th>Satuan</th>
                                         <th>Edit</th>
                                         <th>Delete</th>
                                     </tr>
@@ -34,22 +34,22 @@
                                     @php
                                     $i=1;
                                     @endphp
-                                    @forelse($ruangans as $key => $item)
+                                    @forelse($devices as $key => $item)
                                     <tr>
                                         <td>{{ $i++ }}.</td>
+                                        <td>{{ $item['room_id'] }}</td>
                                         <td>{{ $item['name'] }}</td>
-                                        <td>{{ $item['desc'] }}</td>
-                                        <td>{{ $item['image'] }}</td>
-                                        <td>{{ $item['status'] }}</td>
-                                        <td>{{ $item['people_count'] }}</td>
-                                        <td><a href=" {{ route('admin.ruangan.edit', $key) }} " class="btn btn-sm btn-success">Edit</a></td>
+                                        <td>{{ $item['link_monitoring'] }}</td>
+                                        <td>{{ $item['link_controlling'] }}</td>
+                                        <td>{{ $item['satuan'] }}</td>
+                                        <td><a href=" {{ route('admin.device.edit', $key) }} " class="btn btn-sm btn-success">Edit</a></td>
                                         <td>
-                                            <form action="{{ route('admin.ruangan.destroy', $key) }}" method="POST">
+                                            <form action="{{ route('admin.device.destroy', $key) }}" method="POST">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-sm btn-danger">Delete</button>
                                         </td>
-                                        {{-- <td><a href=" {{ route('admin.ruangan.destroy', $key) }} " class="btn btn-sm btn-danger">Delete</a></td> --}}
+                                        {{-- <td><a href=" {{ route('admin.device.destroy', $key) }} " class="btn btn-sm btn-danger">Delete</a></td> --}}
                                     </tr>
                                     @empty
                                     <tr>

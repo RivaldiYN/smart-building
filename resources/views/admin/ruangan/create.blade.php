@@ -4,9 +4,11 @@
 
 @section('content')
 <div class="card card-success m-2">
-    <div class="card-header">
-      <h3 class="card-title">{{ __('Tambah ruangan') }}</h3>
-    </div>
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <h2 class="card-title">{{ __('Tambah ruangan') }}</h2>
+    <a href="{{ url('admin/ruangan') }}" class="btn btn-sm btn-danger ml-auto">Kembali</a>
+  </div>
+
     <!-- /.card-header -->
     <!-- form start -->
         
