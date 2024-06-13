@@ -8,7 +8,7 @@
     <!-- small box -->
     <div class="small-box bg-info">
       <div class="inner">
-        {{-- <h3>{{$ruangan}}</h3> --}}
+        <h3>{{$ruangansCount}}</h3>
 
         <p>Data Ruangan</p>
       </div>
@@ -23,7 +23,7 @@
     <!-- small box -->
     <div class="small-box bg-success">
       <div class="inner">
-        {{-- <h3>{{$devices}}</h3> --}}
+        <h3>{{$devicesCount}}</h3>
 
         <p>Data Device</p>
       </div>
@@ -38,14 +38,14 @@
     <!-- small box -->
     <div class="small-box bg-warning">
       <div class="inner">
-        {{-- <h3>{{$users}}</h3> --}}
+        <h3>{{$usersCount}}</h3>
 
         <p>User</p>
       </div>
       <div class="icon">
         <i class="ion ion-person-add"></i>
       </div>
-      <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+      <a href="/admin/user" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
     </div>
   </div>
   <!-- ./col -->

@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 
 class RuanganController extends Controller
 {
+    protected $database;
     public function __construct(Database $database){
         $this->database = $database;
         $this->tableName = 'ruangans';
@@ -71,8 +72,7 @@ class RuanganController extends Controller
     }
 
     public function destroy($id){
-        $key = $id;
-        $deleteRef = $this->database->getReference($this->tableName . '/' . $key)->remove();
+        $deleteRef = $this->database->getReference($this->tableName . '/' . $id)->remove();
         if ($deleteRef) {
             return redirect('admin/ruangan')->with('status', 'Ruangan berhasil dihapus');
         } else {

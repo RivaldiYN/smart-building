@@ -10,9 +10,9 @@
                 <div class="col-12">
                     <div class="card card-primary">
                         @if(session('status'))
-                        <h4 class="alert alert-warning mb-2">{{session('status')}}</h4>
+                        <h4 class="alert alert-primary mb-2">{{session('status')}}</h4>
                         @endif
-                        <div class="card-header">
+                        <div class="card-header bg-warning">
                             <h3 class="card-title">Semua Device</h3>
                         </div>
                         <!-- /.card-header -->
@@ -48,6 +48,7 @@
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                            </form>
                                         </td>
                                         {{-- <td><a href=" {{ route('admin.device.destroy', $key) }} " class="btn btn-sm btn-danger">Delete</a></td> --}}
                                     </tr>

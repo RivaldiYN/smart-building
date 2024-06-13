@@ -51,7 +51,7 @@
                     <li class="nav-item">
                         <a href="/admin/device/create/" class="nav-link text-white">
                             <i class="far fa-circle nav-icon"></i>
-                            <p>Tambah Data Devices</p>
+                            <p>Tambah Data Device</p>
                         </a>
                     </li>
                 </ul>
