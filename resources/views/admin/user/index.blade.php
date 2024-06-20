@@ -38,10 +38,35 @@
                                         <td>{{ $item['email'] }}</td>
                                         <td><a href=" {{ route('admin.user.edit', $key) }} " class="btn btn-sm btn-success">Edit</a></td>
                                         <td>
-                                            <form action="{{ route('admin.user.destroy', $key) }}" method="POST">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                            <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#deleteModal{{ $key }}">Delete</button>
+                                            
+                                            <!-- Modal -->
+                                            <div class="modal fade" id="deleteModal{{ $key }}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel{{ $key }}" aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="deleteModalLabel{{ $key }}">Konfirmasi Hapus</h5>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            Apakah Anda yakin ingin menghapus ruangan <strong>{{ $item['nama'] }}</strong>?
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <form action="{{ route('admin.user.destroy', $key) }}" method="POST">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <button type="submit" class="btn btn-danger">Hapus</button>
+                                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            
                                             </form>
                                         </td>
                                     </tr>
@@ -61,4 +86,14 @@
             </div>
         </div>
     </section>
+@endsection
+@section('scripts')
+    <script>
+        $(document).ready(function(){
+            $('[data-toggle="modal"]').on('click', function(){
+                var target = $(this).attr('data-target');
+                $(target).modal('show');
+            });
+        });
+    </script>
 @endsection
