@@ -4,7 +4,7 @@ Institut Teknologi Sumatera
 
 ## Start the Project
 
-### Clone Project Repository
+### 1️⃣ Clone Project Repository
 
 Open Terminal and type
 
@@ -12,7 +12,7 @@ Open Terminal and type
 git clone [REPOSITORY_URL](https://github.com/RivaldiYN/smart-building.git)
 ```
 
-### Enter the Project Directory
+### 2️⃣ Enter the Project Directory
 
 In the terminal, type:
 
@@ -23,7 +23,7 @@ code .
 
 This will automatically open the project in Visual Studio Code/Code Editor.
 
-### Configure the Project
+### 3️⃣ Configure the Project
 
 Add the JSON file from Firebase.
 Copy the .env.example file.
@@ -63,7 +63,7 @@ php artisan key:generate
 npm install
 ```
 
-### Run the Project
+### 4️⃣ Run the Project
 
 Open two terminals:
 
