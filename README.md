@@ -9,7 +9,7 @@ Institut Teknologi Sumatera
 Open Terminal and type
 
 ```bash
-   git clone [REPOSITORY_URL](https://github.com/RivaldiYN/smart-building.git)
+git clone [REPOSITORY_URL](https://github.com/RivaldiYN/smart-building.git)
 ```
 
 ### Enter the Project Directory
@@ -17,8 +17,8 @@ Open Terminal and type
 In the terminal, type:
 
 ```bash
-   cd smart-building
-   code .
+cd smart-building
+code .
 ```
 
 This will automatically open the project in Visual Studio Code/Code Editor.
@@ -47,9 +47,9 @@ FIREBASE_CREDENTIALS='${FIREBASE_CREDENTIAL}'
 5. Install/Update Composer:
    "As a tip, make sure to read any errors that occur (usually some configuration is needed in php.ini, such as enabling extension=sodium by removing the ; (semicolon) before the text)."
 
-    ```bash
-    composer install
-    ```
+```bash
+composer install
+```
 
 6. Generate a Key
 
@@ -83,5 +83,5 @@ Open the website at http://127.0.0.1:8000/
 
 ## Our Team:
 
-[-] Rivaldi Yonathan Nainggolan
-[-] Yondika Vio Landa
+-   [ ] Rivaldi Yonathan Nainggolan
+-   [ ] Yondika Vio Landa
