@@ -73,8 +73,8 @@
     </head>
 
     <body>
-        <div class="container my-4 pb-5">
-            <div class="row">
+        <div class="container my-5 pb-5">
+            <div class="row d-flex justify-content-center">
                 <div class="col-lg-3 col-6">
                     <!-- small box -->
                     <div class="small-box bg-info">
@@ -122,22 +122,6 @@
                                 class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
-                <!-- ./col -->
-                <div class="col-lg-3 col-6">
-                    <!-- small box -->
-                    <div class="small-box bg-danger">
-                        <div class="inner">
-                            {{-- <h3>{{$x}}</h3> --}}
-
-                            <p>X</p>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-pie-graph"></i>
-                        </div>
-                        <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-                    </div>
-                </div>
-                <!-- ./col -->
             </div>
 
             <div class="d-flex justify-content-end mb-4">
