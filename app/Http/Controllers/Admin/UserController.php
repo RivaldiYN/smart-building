@@ -2,24 +2,35 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Role;
-use Kreait\Firebase\Contract\Database;
+use Kreait\Firebase\Contract\Firestore;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-    protected $database;
-    public function __construct(Database $database){
-        $this->database = $database;
-        $this->tableName = 'users';
+    protected $firestore;
+    protected $collectionName;
+
+    public function __construct(Firestore $firestore)
+    {
+        $this->firestore = $firestore;
+        $this->collectionName = 'users';
     }
 
     public function index()
     {
-        $users = $this->database->getReference($this->tableName)->getValue();
-        $users = is_array($users) ? $users : [];
+        $usersCollection = $this->firestore->database()->collection($this->collectionName);
+        $documents = $usersCollection->documents();
+        $users = [];
+
+        foreach ($documents as $document) {
+            if ($document->exists()) {
+                $users[$document->id()] = $document->data();
+            }
+        }
+
         return view('admin.user.index', compact('users'));
     }
 
@@ -39,64 +50,55 @@ class UserController extends Controller
             'roles_id' => 'required|exists:roles,id',
         ]);
 
-        // Simpan user baru ke Firebase Realtime Database
+        // Simpan user baru ke Firestore
         $postData = [
             'nama' => $request->nama,
             'email' => $request->email,
-            'password' => bcrypt($request->password), // Jangan lupa hash password
+            'password' => bcrypt($request->password), // Hash password
             'roles_id' => $request->roles_id,
             'permissions' => [] // Anda bisa menambahkan permissions jika diperlukan
         ];
 
-        $postRef = $this->database->getReference($this->tableName)->push($postData);
+        $usersCollection = $this->firestore->database()->collection($this->collectionName);
+        $postRef = $usersCollection->add($postData);
 
-        if ($postRef) {
-            return redirect('admin/user')->with('status', 'User berhasil ditambah');
-        }
-        else{
-            return redirect('admin/user')->with('status', 'User gagal ditambah');
-        }
+        return redirect('admin/user')->with('status', $postRef ? 'User berhasil ditambah' : 'User gagal ditambah');
     }
 
     public function edit($id)
     {
-        $key = $id;
-        $editdata = $this->database->getReference($this->tableName)->getChild($key)->getValue();
-        
-        // Ambil semua roles dari database
-        $roles = Role::all();
+        $userDocument = $this->firestore->database()->collection($this->collectionName)->document($id)->snapshot();
 
-        if ($editdata) {
-            return view('admin.user.edit', compact('editdata', 'roles', 'key'));
+        if ($userDocument->exists()) {
+            $editdata = $userDocument->data();
+            $roles = Role::all();
+            return view('admin.user.edit', compact('editdata', 'roles', 'id'));
         } else {
             return redirect('admin/user')->with('status', 'User tidak ditemukan');
         }
     }
 
-    public function update(Request $request, $id){
+    public function update(Request $request, $id)
+    {
         $postData = [
             'nama' => $request->nama,
             'email' => $request->email,
-            'password' => bcrypt($request->password), // Jangan lupa hash password
+            'password' => bcrypt($request->password), // Hash password
             'roles_id' => $request->roles_id,
             'permissions' => [] // Anda bisa menambahkan permissions jika diperlukan
         ];
-    
-        $updateRef = $this->database->getReference($this->tableName . '/' . $id)->update($postData);
-        
-        if ($updateRef) {
-            return redirect('admin/user')->with('status', 'User berhasil diperbarui');
-        } else {
-            return redirect('admin/user')->with('status', 'User gagal diperbarui');
-        }
-        }
-    
-        public function destroy($id){
-            $deleteRef = $this->database->getReference($this->tableName . '/' . $id)->remove();
-            if ($deleteRef) {
-                return redirect('admin/user')->with('status', 'User berhasil dihapus');
-            } else {
-                return redirect('admin/user')->with('status', 'User gagal dihapus');
-            }
-        }
+
+        $usersCollection = $this->firestore->database()->collection($this->collectionName);
+        $updateRef = $usersCollection->document($id)->set($postData);
+
+        return redirect('admin/user')->with('status', $updateRef ? 'User berhasil diperbarui' : 'User gagal diperbarui');
+    }
+
+    public function destroy($id)
+    {
+        $usersCollection = $this->firestore->database()->collection($this->collectionName);
+        $deleteRef = $usersCollection->document($id)->delete();
+
+        return redirect('admin/user')->with('status', $deleteRef ? 'User berhasil dihapus' : 'User gagal dihapus');
+    }
 }

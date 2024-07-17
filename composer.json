@@ -6,9 +6,10 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "google/cloud-firestore": "^1.44",
         "jeroennoten/laravel-adminlte": "^3.11",
-        "kreait/firebase-php": "^7.12",
-        "kreait/laravel-firebase": "^5.8",
+        "kreait/firebase-php": "7.12",
+        "kreait/laravel-firebase": "5.8",
         "laravel/framework": "^11.9",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.9",
@@ -63,6 +64,9 @@
         "allow-plugins": {
             "pestphp/pest-plugin": true,
             "php-http/discovery": true
+        },
+        "platform": {
+            "ext-grpc": "1.0.0"
         }
     },
     "minimum-stability": "stable",

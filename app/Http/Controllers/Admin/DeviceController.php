@@ -2,31 +2,43 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Kreait\Firebase\Contract\Database;
+use Kreait\Firebase\Contract\Firestore;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-
 class DeviceController extends Controller
 {
-    protected $database;
-    public function __construct(Database $database){
-        $this->database = $database;
-        $this->tableName = 'devices';
+    protected $firestore;
+    protected $collectionName;
+
+    public function __construct(Firestore $firestore)
+    {
+        $this->firestore = $firestore;
+        $this->collectionName = 'devices';
     }
 
     public function index()
     {
-        $devices = $this->database->getReference($this->tableName)->getValue();
-        $devices = is_array($devices) ? $devices : [];
+        $devicesCollection = $this->firestore->database()->collection($this->collectionName);
+        $documents = $devicesCollection->documents();
+        $devices = [];
+        
+        foreach ($documents as $document) {
+            if ($document->exists()) {
+                $devices[$document->id()] = $document->data();
+            }
+        }
+        
         return view('admin.device.index', compact('devices'));
     }
 
-    public function create(){
+    public function create()
+    {
         return view('admin.device.create');
     }
 
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         $postData = [
             'room_id' => $request->room_id,
             'name' => $request->name,
@@ -34,46 +46,55 @@ class DeviceController extends Controller
             'link_controlling' => $request->link_controlling,
             'satuan' => $request->satuan
         ];
-        $postRef = $this->database->getReference($this->tableName)->push($postData);
-        if($postRef){
+
+        $devicesCollection = $this->firestore->database()->collection($this->collectionName);
+        $postRef = $devicesCollection->add($postData);
+        
+        if ($postRef) {
             return redirect('admin/device')->with('status', 'Device berhasil ditambah');
-        }
-        else{
+        } else {
             return redirect('admin/device')->with('status', 'Device gagal ditambah');
         }
     }
-    
-    public function edit($id){
-    $key = $id;
-    $editdata = $this->database->getReference($this->tableName)->getChild($key)->getValue();
-    if($editdata){
-        return view('admin.device.edit', compact('editdata', 'key'));
-    }
-    else{
-        return redirect('admin/device')->with('status', 'device tidak ditemukan');
-    }
-}
 
-    public function update(Request $request, $id){
-    $postData = [
-        'room_id' => $request->room_id,
-        'name' => $request->name,
-        'link_monitoring' => $request->link_monitoring,
-        'link_controlling' => $request->link_controlling,
-        'satuan' => $request->satuan
-    ];
-
-    $updateRef = $this->database->getReference($this->tableName . '/' . $id)->update($postData);
-    
-    if ($updateRef) {
-        return redirect('admin/device')->with('status', 'Device berhasil diperbarui');
-    } else {
-        return redirect('admin/device')->with('status', 'Device gagal diperbarui');
-    }
+    public function edit($id)
+    {
+        $devicesCollection = $this->firestore->database()->collection($this->collectionName);
+        $document = $devicesCollection->document($id)->snapshot();
+        
+        if ($document->exists()) {
+            $editdata = $document->data();
+            return view('admin.device.edit', compact('editdata', 'id'));
+        } else {
+            return redirect('admin/device')->with('status', 'Device tidak ditemukan');
+        }
     }
 
-    public function destroy($id){
-        $deleteRef = $this->database->getReference($this->tableName . '/' . $id)->remove();
+    public function update(Request $request, $id)
+    {
+        $postData = [
+            'room_id' => $request->room_id,
+            'name' => $request->name,
+            'link_monitoring' => $request->link_monitoring,
+            'link_controlling' => $request->link_controlling,
+            'satuan' => $request->satuan
+        ];
+
+        $devicesCollection = $this->firestore->database()->collection($this->collectionName);
+        $updateRef = $devicesCollection->document($id)->set($postData);
+        
+        if ($updateRef) {
+            return redirect('admin/device')->with('status', 'Device berhasil diperbarui');
+        } else {
+            return redirect('admin/device')->with('status', 'Device gagal diperbarui');
+        }
+    }
+
+    public function destroy($id)
+    {
+        $devicesCollection = $this->firestore->database()->collection($this->collectionName);
+        $deleteRef = $devicesCollection->document($id)->delete();
+        
         if ($deleteRef) {
             return redirect('admin/device')->with('status', 'Device berhasil dihapus');
         } else {
