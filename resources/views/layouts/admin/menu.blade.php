@@ -3,7 +3,7 @@
     <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
             <li class="nav-item">
-                <a href="/dashboard" class="nav-link text-white">
+                <a href="{{ route('index') }}" class="nav-link text-white">
                     <i class="nav-icon fas fa-tachometer-alt"></i>
                     <p>
                         Dashboard
@@ -11,7 +11,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a href="/" class="nav-link text-white">
+                <a href="#" class="nav-link text-white">
                     <i class="nav-icon fas fa-home"></i>
                     <p>
                         Ruangan
@@ -20,13 +20,13 @@
                 </a>
                 <ul class="nav nav-treeview">
                     <li class="nav-item">
-                        <a href="/admin/ruangan/" class="nav-link text-white">
+                        <a href="{{ route('admin.ruangan.index') }}" class="nav-link text-white">
                             <i class="far fa-circle nav-icon"></i>
                             <p>Data Ruangan</p>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="/admin/ruangan/create/" class="nav-link text-white">
+                        <a href="{{ route('admin.ruangan.create') }}" class="nav-link text-white">
                             <i class="far fa-circle nav-icon"></i>
                             <p>Tambah Data Ruangan</p>
                         </a>
@@ -43,13 +43,13 @@
                 </a>
                 <ul class="nav nav-treeview">
                     <li class="nav-item">
-                        <a href="/admin/device/" class="nav-link text-white">
+                        <a href="{{ route('admin.device.index') }}" class="nav-link text-white">
                             <i class="far fa-circle nav-icon"></i>
                             <p>Data Device</p>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="/admin/device/create/" class="nav-link text-white">
+                        <a href="{{ route('admin.device.create') }}" class="nav-link text-white">
                             <i class="far fa-circle nav-icon"></i>
                             <p>Tambah Data Device</p>
                         </a>
@@ -66,13 +66,13 @@
                 </a>
                 <ul class="nav nav-treeview">
                     <li class="nav-item">
-                        <a href="/admin/user/" class="nav-link text-white">
+                        <a href="{{ route('admin.user.index') }}" class="nav-link text-white">
                             <i class="far fa-circle nav-icon"></i>
                             <p>Data User</p>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="/admin/user/create/" class="nav-link text-white">
+                        <a href="{{ route('admin.user.create') }}" class="nav-link text-white">
                             <i class="far fa-circle nav-icon"></i>
                             <p>Tambah Data User</p>
                         </a>

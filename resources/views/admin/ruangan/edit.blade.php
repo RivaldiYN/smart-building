@@ -13,7 +13,7 @@
     <!-- form start -->
         
       <div class="card-body">
-        <form action="{{ route('admin.ruangan.update', $key) }}" method="POST">
+        <form action="{{ route('admin.ruangan.update', $id) }}" method="POST">
             @csrf
             @method('PUT')
             <div class="form-group mb-3">

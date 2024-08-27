@@ -62,13 +62,6 @@
                         Masuk
                     </button>
                 </div>
-
-                {{-- <div class="text-center">
-                    <p>Belum memiliki akun?</p>
-                    <a href="{{ route('register') }}" class="btn btn-light">
-                        Daftar
-                    </a>
-                </div> --}}
             </form>
         </div>
     </div>

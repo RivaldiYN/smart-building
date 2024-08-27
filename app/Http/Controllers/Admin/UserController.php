@@ -42,21 +42,24 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
-        // Validasi request
-        $request->validate([
-            'nama' => 'required|string',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:6',
-            'roles_id' => 'required|exists:roles,id',
+        // Hash the password
+        $hashedPassword = bcrypt($request->password);
+
+        // Save the user to Laravel database for authentication
+        $user = User::create([
+            'nama' => $request->nama,
+            'email' => $request->email,
+            'password' => $hashedPassword,
+            'roles_id' => $request->roles_id,  // Ensure this is being set correctly
         ]);
 
-        // Simpan user baru ke Firestore
+        // Save the user to Firestore
         $postData = [
             'nama' => $request->nama,
             'email' => $request->email,
-            'password' => bcrypt($request->password), // Hash password
-            'roles_id' => $request->roles_id,
-            'permissions' => [] // Anda bisa menambahkan permissions jika diperlukan
+            'password' => $hashedPassword,
+            'roles_id' => $request->roles_id,  // Ensure this is being passed correctly
+            'permissions' => [] // Add any permissions if necessary
         ];
 
         $usersCollection = $this->firestore->database()->collection($this->collectionName);
@@ -64,7 +67,6 @@ class UserController extends Controller
 
         return redirect('admin/user')->with('status', $postRef ? 'User berhasil ditambah' : 'User gagal ditambah');
     }
-
     public function edit($id)
     {
         $userDocument = $this->firestore->database()->collection($this->collectionName)->document($id)->snapshot();
@@ -77,6 +79,7 @@ class UserController extends Controller
             return redirect('admin/user')->with('status', 'User tidak ditemukan');
         }
     }
+
 
     public function update(Request $request, $id)
     {

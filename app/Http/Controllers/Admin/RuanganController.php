@@ -14,7 +14,7 @@ class RuanganController extends Controller
     public function __construct(Firestore $firestore)
     {
         $this->firestore = $firestore;
-        $this->collectionName = 'ruangans';
+        $this->collectionName = 'rooms';
     }
 
     public function index()
