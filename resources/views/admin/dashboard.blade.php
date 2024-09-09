@@ -335,19 +335,19 @@
         const roomData = {
             'humas': {
                 name: 'Ruangan Humas',
-                status: 'Nyala',
+                status: 'true',
                 people: 5,
                 selector: '.humas'
             },
             'international-office': {
                 name: 'International Office',
-                status: 'Mati',
+                status: 'false',
                 people: 2,
                 selector: '.international-office'
             },
             'wr-1': {
                 name: 'Ruangan WR-1',
-                status: 'Nyala',
+                status: 'true',
                 people: 10,
                 selector: '.wr-1'
             }
@@ -356,7 +356,7 @@
         function updateFillColor() {
             for (const key in roomData) {
                 const room = roomData[key];
-                if (room.status === 'Nyala') {
+                if (room.status === 'true') {
                     $(room.selector).attr('fill', '#3eeb09');
                 } else {
                     $(room.selector).attr('fill', '#494d54');
