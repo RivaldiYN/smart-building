@@ -8,18 +8,18 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-12">
-                    <div class="card card-primary">
+                    <div class="card card-primary shadow-lg rounded-lg">
                         @if(session('status'))
                         <h4 class="alert alert-primary mb-2">{{session('status')}}</h4>
                         @endif
-                        <div class="card-header bg-warning ">
-                            <h3 class="card-title">Semua Ruangan</h3>
+                        <div class="card-header bg-warning text-center rounded-top">
+                            <h3 class="card-title font-weight-bold">Semua Ruangan</h3>
                         </div>
                         <!-- /.card-header -->
-                        <div class="card-body" style="overflow-x:overlay">
-                            <table class="table table-bordered">
-                                <thead>
-                                    <tr>
+                        <div class="card-body" style="overflow-x:auto;">
+                            <table class="table table-hover table-bordered table-striped">
+                                <thead class="thead-light">
+                                    <tr class="text-center">
                                         <th style="width: 10px">No</th>
                                         <th>Nama Ruangan</th>
                                         <th>Deskripsi</th>
@@ -32,20 +32,32 @@
                                 </thead>
                                 <tbody>
                                     @php
-                                    $i=1;
+                                    $i = 1;
                                     @endphp
                                     @forelse($ruangans as $key => $item)
-                                    <tr>
+                                    <tr class="text-center align-middle">
                                         <td>{{ $i++ }}.</td>
                                         <td>{{ $item['name'] }}</td>
                                         <td>{{ $item['desc'] }}</td>
                                         <td>{{ $item['image'] }}</td>
-                                        <td>{{ $item['status'] }}</td>
-                                        <td>{{ $item['people_count'] }}</td>
-                                        <td><a href="{{ route('admin.ruangan.edit', $key) }}" class="btn btn-sm btn-success">Edit</a></td>
                                         <td>
-                                            <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#deleteModal{{ $key }}">Delete</button>
-                                            
+                                            @if($item['status'] != 'Nyala')
+                                                <span class="badge badge-danger">Not Available</span>
+                                            @else
+                                                <span class="badge badge-success">Available</span>
+                                            @endif
+                                        </td>
+                                        <td>{{ $item['people_count'] }}</td>
+                                        <td>
+                                            <a href="{{ route('admin.ruangan.edit', $key) }}" class="btn btn-sm btn-success btn-block">
+                                                <i class="fas fa-edit"></i> Edit
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <button type="button" class="btn btn-sm btn-danger btn-block" data-toggle="modal" data-target="#deleteModal{{ $key }}">
+                                                <i class="fas fa-trash"></i> Delete
+                                            </button>
+
                                             <!-- Modal -->
                                             <div class="modal fade" id="deleteModal{{ $key }}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel{{ $key }}" aria-hidden="true">
                                                 <div class="modal-dialog" role="document">
@@ -74,7 +86,7 @@
                                     </tr>
                                     @empty
                                     <tr>
-                                        <td colspan="8"> Data Tidak Ada</td>
+                                        <td colspan="8" class="text-center">Data Tidak Ada</td>
                                     </tr>
                                     @endforelse
                                 </tbody>
