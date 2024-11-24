@@ -17,23 +17,23 @@
             @csrf
             <div class="form-group mb-3">
                 <label>ID Ruangan</label>
-                <input type="text" name="room_id" class="form-control">
+                <input type="text" placeholder="Masukkan ID Ruangan" name="room_id" class="form-control">
             </div>
             <div class="form-group mb-3">
                 <label>Nama Device</label>
-                <input type="text" name="name" class="form-control">
+                <input type="text" placeholder="Masukkan Nama Device" name="name" class="form-control">
             </div>
             <div class="form-group mb-3">
                 <label>Link Monitoring</label>
-                <input type="text" name="link_monitoring" class="form-control">
+                <input type="text" placeholder="Masukkan Link Monitoring" name="link_monitoring" class="form-control">
             </div>
             <div class="form-group mb-3">
                 <label>Link Controlling</label>
-                <input type="text" name="link_controlling" class="form-control">
+                <input type="text" placeholder="Masukkan Link Controlling" name="link_controlling" class="form-control">
             </div>
             <div class="form-group mb-3">
                 <label>Satuan</label>
-                <input type="text" name="satuan" class="form-control">
+                <input type="text" placeholder="Masukkan Satuan" name="satuan" class="form-control">
             </div>
         <div class="">
             <button type="submit" class="btn btn-success mt-3">{{ __('Simpan') }}</</button>

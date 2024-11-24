@@ -17,17 +17,17 @@
             @csrf
             <div class="form-group mb-3">
                 <label>Nama User</label>
-                <input type="text" name="nama" class="form-control">
+                <input type="text" placeholder="Masukkan Nama User" name="nama" class="form-control">
             </div>
 
             <div class="form-group mb-3">
                 <label for="email">Email</label>
-                <input type="email" name="email" id="email" class="form-control" required>
+                <input type="email" placeholder="Masukkan Email" name="email" id="email" class="form-control" required>
             </div>
         
             <div class="form-group mb-3">
                 <label for="password">Password</label>
-                <input type="password" name="password" id="password" class="form-control" required>
+                <input type="password" placeholder="Masukkan Password" name="password" id="password" class="form-control" required>
             </div>
         
             <div class="form-group mb-3">
