@@ -50,6 +50,17 @@
     .btn {
         border-radius: 1;
     }
+    .input-group {
+        position: relative;
+    }
+    .input-group .toggle-password {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+        color: #d4af37; /* Adjust color as needed */
+    }
 </style>
 
 <div class="background-image"></div>
@@ -77,8 +88,11 @@
                         @enderror
                     </div>
 
-                    <div class="mb-3">
+                    <div class="mb-3 input-group">
                         <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" placeholder="Masukkan password" required>
+                        <span class="toggle-password" onclick="togglePasswordVisibility()">
+                            <i id="toggleIcon" class="fas fa-eye"></i>
+                        </span>
                         @error('password')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -96,4 +110,20 @@
         </div>
     </div>
 </div>
+
+<script>
+    function togglePasswordVisibility() {
+        var passwordInput = document.getElementById("password");
+        var toggleIcon = document.getElementById("toggleIcon");
+        if (passwordInput.type === "password") {
+            passwordInput.type = "text"; // Show password
+            toggleIcon.classList.remove("fa-eye");
+            toggleIcon.classList.add("fa-eye-slash");
+        } else {
+            passwordInput.type = "password"; // Hide password
+            toggleIcon.classList.remove("fa-eye-slash");
+            toggleIcon.classList.add("fa-eye");
+        }
+    }
+</script>
 @endsection
