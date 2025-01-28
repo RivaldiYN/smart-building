@@ -8,6 +8,11 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ config('app.name', 'Smart-Building-ITERA') }}</title>
+    <link rel="apple-touch-icon" sizes="192x192" href="{{ asset('assets/assets/favicon/android-chrome-192x192.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('assets/assets/favicon/favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('assets/assets/favicon/favicon-16x16.png') }}">
+    <link rel="manifest" href="{{ asset('assets/assets/favicon/site.webmanifest') }}">
+
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.bunny.net">
