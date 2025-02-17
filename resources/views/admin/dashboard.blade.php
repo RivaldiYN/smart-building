@@ -331,43 +331,91 @@
     </div>
 
     <!-- Modal -->
-    <div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="infoModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="infoModalLabel">Detail Informasi Ruangan</h5>
-                    <button type="button" class="close" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <p id="roomStatus">Status: </p>
-                    <p id="roomPeople">Jumlah Orang: </p>
-                    <p id="roomACStatus">Status AC: </p>
-                    <p id="roomACMode">Mode AC: </p>
-                    <p id="roomTemperature">Suhu: </p>
-                    <p id="roomTemperatureClassification">Klasifikasi Suhu: </p>
-                    <p id="roomScheduleStatus">Jadwal Aktif: </p>
-                    <p id="roomScheduleStart">Jadwal Mulai: </p>
-                    <p id="roomScheduleEnd">Jadwal Berakhir: </p>
-                    <p id="roomDoorStatus">Status Pintu: </p>
-                    <p id="roomLampStatus">Status Lampu: </p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger close-modal">Close</button>
-                </div>
+<div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="infoModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="infoModalLabel">Detail Informasi Ruangan</h5>
+                <button type="button" class="close" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p id="roomStatus">Status: </p>
+                <p id="roomACStatus">Status AC: </p>
+                <p id="roomACMode">Mode AC: </p>
+                <p id="roomTemperature">Suhu: </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger close-modal">Close</button>
             </div>
         </div>
     </div>
+</div>
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+<script>
+    // Firebase configuration
+    const firebaseConfig = {
+        apiKey: "{{ env('FIREBASE_API_KEY') }}",
+        authDomain: "{{ env('FIREBASE_AUTH_DOMAIN') }}",
+        databaseURL: "{{ env('FIREBASE_DATABASE_URL') }}",
+        projectId: "{{ env('FIREBASE_PROJECT_ID') }}",
+        storageBucket: "{{ env('FIREBASE_STORAGE_BUCKET') }}",
+        messagingSenderId: "{{ env('FIREBASE_MESSAGING_SENDER_ID') }}",
+        appId: "{{ env('FIREBASE_APP_ID') }}"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            let isSecond = false;
+    // Real-time listener for all rooms under 'room' node
+    database.ref('room').on('value', (snapshot) => {
+        const rooms = snapshot.val();
+        Object.entries(rooms).forEach(([roomId, roomData]) => {
+            const svgElement = document.querySelector(`.${roomId}`);
+            if (svgElement && roomData['status-lamp'] !== undefined) {
+                // Update color based on lamp status
+                svgElement.style.fill = roomData['status-lamp'] ? '#28a745' : '#dc3545';
+                svgElement.dataset.roomId = roomId;
+            }
+        });
+    });
+
+    // Handle SVG clicks to show modal with real-time data
+    document.querySelectorAll('path.animation').forEach(element => {
+        element.addEventListener('click', function() {
+            const roomId = this.dataset.roomId;
+            const roomRef = database.ref(`room/${roomId}`);
+            
+            roomRef.once('value').then((snapshot) => {
+                const roomData = snapshot.val();
+                // Safely access properties with fallbacks
+                const acStatus = roomData.AC?.status ?? 'N/A';
+                const acMode = roomData.AC?.['is-auto'] ? 'Otomatis' : 'Manual';
+                const temp = roomData.AC?.temp ?? 'N/A';
+                
+                // Update modal content
+                document.getElementById('roomStatus').textContent = `Status Lampu: ${roomData['status-lamp'] ? 'Nyala' : 'Mati'}`;
+                document.getElementById('roomACStatus').textContent = `Status AC: ${acStatus}`;
+                document.getElementById('roomACMode').textContent = `Mode AC: ${acMode}`;
+                document.getElementById('roomTemperature').textContent = `Suhu: ${temp}°C`;
+                // Add other fields similarly with proper checks
+
+                $('#infoModal').modal('show');
+            }).catch(error => console.error('Error fetching room data:', error));
+        });
+    });
+
+    // Close modal handlers
+    $('.close-modal, .close').on('click', () => $('#infoModal').modal('hide'));
+</script>
+<script>
+    $(document).ready(function() {
+        
+        let isSecond = false;
             const toggleFloorBtn = $('#toggleFloorBtn');
             const toggleFloorText = $('#toggleFloorText');
             const floor1 = $('#floor1');
@@ -384,111 +432,6 @@
                     floor1.show();
                 }
             });
-            const roomData = {
-                "Ruang-IIO": {
-                    "AC": {
-                        "is-auto": false,
-                        "status": false,
-                        "temp": 5,
-                        "temp-classification": "dingin"
-                    },
-                    "feature-map-url": "https://ctfassets.imgix.net/vh7r69kgcki3/46VeGE2tnqmkRLYI6VEJeh/9e35ea0ec8c67569128be3f0bccff6eb/Web_150DPI-20221216_WeWork_Product_Shoot_Q4_3.jpg?auto=format%20compress&fit=crop&q=50&w=750px",
-                    "ket-suhu": "Normal",
-                    "num_heads": 8,
-                    "predicted_label": "dingin",
-                    "people-count": 0,
-                    "raw-img-url": "https://ctfassets.imgix.net/vh7r69kgcki3/46VeGE2tnqmkRLYI6VEJeh/9e35ea0ec8c67569128be3f0bccff6eb/Web_150DPI-20221216_WeWork_Product_Shoot_Q4_3.jpg?auto=format%20compress&fit=crop&q=50&w=750px",
-                    "schedule": {
-                        "end": 12321321213,
-                        "start": 2143212132,
-                        "status": false
-                    },
-                    "status-door": false,
-                    "status-lamp": false,
-                    "timestamp": 1466769937914
-                },
-                "Ruang-WR1": {
-                    "AC": {
-                        "is-auto": false,
-                        "status": false,
-                        "temp": 0,
-                        "temp-classification": "dingin"
-                    },
-                    "feature-map-url": "https://example.com/map-rektor",
-                    "people-count": 2,
-                    "raw-img-url": "https://example.com/img-rektor",
-                    "schedule": {
-                        "end": 12062024,
-                        "start": 12062024,
-                        "status": false
-                    },
-                    "status-lamp1": false,
-                    "status-lamp2": false,
-                    "status_door": false
-                },
-                "Ruang-rektor": {
-                    "AC": {
-                        "is-auto": false,
-                        "status": false,
-                        "temp": 0,
-                        "temp-classification": "dingin"
-                    },
-                    "feature-map-url": "https://example.com/map-rektor",
-                    "people-count": 2,
-                    "raw-img-url": "https://example.com/img-rektor",
-                    "schedule": {
-                        "end": 12062024,
-                        "start": 12062024,
-                        "status": false
-                    },
-                    "status-lamp1": false,
-                    "status-lamp2": false,
-                    "status_door": false
-                }
-            };
-
-            function updateFillColor() {
-                for (const key in roomData) {
-                    const room = roomData[key];
-                    if (room.status === 'Nyala') {
-                        $(room.selector).attr('fill', '#3eeb09');
-                    } else {
-                        $(room.selector).attr('fill', '#494d54');
-                    }
-                }
-            }
-            updateFillColor();
-            $('.Ruang-IIO, .Ruang-rektor, .Ruang-WR1').on('click', function() {
-                const roomClass = $(this).attr('class').split(' ').filter(c => roomData[c])[0];
-                const roomInfo = roomData[roomClass];
-
-                // Mengisi informasi ke dalam modal
-                $('#roomStatus').text(`Status: ${roomInfo.status ? 'Nyala' : 'Mati'}`);
-                $('#roomPeople').text(`Jumlah Orang: ${roomInfo.people}`);
-                $('#roomACStatus').text(`Status AC: ${roomInfo.AC.status ? 'Nyala' : 'Mati'}`);
-                $('#roomACMode').text(`Mode AC: ${roomInfo.AC["is-auto"] ? 'Otomatis' : 'Manual'}`);
-                $('#roomTemperature').text(`Suhu: ${roomInfo.AC.temp}`);
-                $('#roomTemperatureClassification').text(
-                    `Klasifikasi Suhu: ${roomInfo.AC["temp-classification"]}`);
-                $('#roomScheduleStatus').text(
-                    `Jadwal Aktif: ${roomInfo.schedule.status ? 'Aktif' : 'Tidak Aktif'}`);
-                $('#roomScheduleStart').text(
-                    `Jadwal Mulai: ${new Date(roomInfo.schedule.start * 1000).toLocaleString()}`);
-                $('#roomScheduleEnd').text(
-                    `Jadwal Berakhir: ${new Date(roomInfo.schedule.end * 1000).toLocaleString()}`);
-                $('#roomDoorStatus').text(
-                    `Status Pintu: ${roomInfo["status-door"] ? 'Terbuka' : 'Tertutup'}`);
-                $('#roomLampStatus').text(`Status Lampu: ${roomInfo["status-lamp"] ? 'Nyala' : 'Mati'}`);
-
-                // Tampilkan modal
-                $('#infoModal').modal('show');
-            });
-
-            // Menutup modal
-            $('.close-modal, .close').on('click', function() {
-                $('#infoModal').modal('hide');
-            });
-
         });
-    </script>
+</script>
 @endsection
